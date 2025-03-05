@@ -1,0 +1,37 @@
+for unigram:
+training: 
+1. combine all the positive reviews together
+2. count the number of occurrences of each word across all the positive reviews
+3. calculate the log probability of each word occurring in a positive review (number of times word occured / total number words), store in map
+4. add laplace smoothing
+5. Repeat 1-4 for negative reviews
+
+dev: 
+for each review
+1. calculate MAP for positive review = log(prior) + sum(prob for word to occur in positive review, for every word in review)
+2. if word not in training, use the unknown word prob
+3. calculate MAP for negative review = log(1 - prior) + sum(prob for word to occur in negative review, for every word in review)
+4. if word not in training, use the unknown word prob
+5. if MAP positive > MAP negative report 1, else 0
+
+for bigram:
+training: 
+1. combine all the positive reviews together
+2. steps 2-4 from unigram training
+3. count the number of occurrences of each adjacent pair of words across all the positive reviews
+4. calculate the log probability of each pair occurring in a positive review (number of times pair occured / total number words), store in map
+5. add laplace smoothing
+6. Repeat 1-5 for negative reviews
+
+dev: 
+for each review
+1. calculate MAP for positive review = log(prior) + sum(prob for pair to occur in positive review, for every pair in review)
+2. if pair not in training, treat them as a unigram (use the unigram training to calculate prob for word to occur in positive review)
+3. calculate MAP for negative review = log(1 - prior) + sum(prob for pair to occur in negative review, for every pair in review)
+4. if pair not in training, treat them as a unigram (use the unigram training to calculate prob for word to occur in negative review)
+5. if MAP positive > MAP negative report 1, else 0
+
+for mixed prediction, calculate MAP seperately using unigram and bigram
+then new MAP for positive = (1 - lambda)*MAP positive unigram + lambda*MAP positive bigram
+new MAP for negative = (1 - lambda)*MAP negative unigram + lambda*MAP negative bigram
+if MAP positive > MAP negative report 1, else 0
