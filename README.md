@@ -1,1 +1,1 @@
-# ECE_448_AI
+# Project List
